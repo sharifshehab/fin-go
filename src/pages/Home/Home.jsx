@@ -1,9 +1,16 @@
 
 const Home = () => {
     return (
-        <div>
-            <h4>home</h4>
-        </div>
+        <main>
+
+           <h2 className="text-primaryColor">title</h2>
+
+
+            {/* <section>
+                <div></div>
+            </section> */}
+
+        </main>
     );
 };
 
