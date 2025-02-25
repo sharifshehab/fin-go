@@ -3,22 +3,20 @@ import useAxiosPublic from "../../hooks/useAxiosPublic";
 import useAuth from "../../hooks/useAuth";
 import { TbLoader3 } from "react-icons/tb";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Register = () => {
     const { register, handleSubmit, reset, formState: { errors } } = useForm();
     const axiosPublic = useAxiosPublic();
     const { handleRegister, setUserNameAndPhoto } = useAuth();
     const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();
 
     const onSubmit = async (formData) => {
         setLoading(true);
 
         let balance;
-        if (formData.accountType === "user") {
-            balance = 40;
-        } else {
-            balance = 100000;
-        }
+        formData.accountType === "user" ? balance = 40 : balance = 100000;
 
         const data = {
             name: formData.name,
@@ -34,11 +32,11 @@ const Register = () => {
         try {
             const userCredential = await handleRegister(formData.email, formData.pin + "!");
             const user = userCredential.user;
+            console.log(user);
             await setUserNameAndPhoto(formData.name);
-
             const res = await axiosPublic.post("/users", data);
-            console.log(res.data);
             reset();
+            navigate('/');
         } catch (error) {
             
             console.error(error);
@@ -102,6 +100,10 @@ const Register = () => {
                                 className="peer outline-none px-4 py-3 w-full bg-white text-black transition-colors duration-300"
                                 {...register("phone", {
                                     required: "Phone number is required",
+                                    pattern: {
+                                        value: /^\+\d{1,4}\d{6,12}$/,
+                                        message: "Enter a valid phone number with country code (e.g., +8801709370961)",
+                                    },
                                 })}
                             />
                             {errors.phone && (
