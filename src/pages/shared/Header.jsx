@@ -7,10 +7,14 @@ import { CiMenuFries } from "react-icons/ci";
 import { FiUser } from "react-icons/fi";
 import { IoSettingsOutline } from "react-icons/io5";
 import Container from "../../components/Container";
+import useAuth from "../../hooks/useAuth";
+import { Link } from "react-router-dom";
 
 const Header = () => {
-  const [accountMenuOpen, setAccountMenuOpen] = useState(false)
-  const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false)
+  const [accountMenuOpen, setAccountMenuOpen] = useState(false);
+  const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
+  const { handleLogOut, user } = useAuth();
+  console.log(user);
 
 
   return (
@@ -37,8 +41,9 @@ const Header = () => {
 
       </ul> */}
 
-          {/* user account */}
-          <div className="flex items-center gap-[15px]">
+          
+          {user?.uid ? <div className="flex items-center gap-[15px]">
+
             <div className="flex items-center gap-[10px] cursor-pointer relative"
               onClick={() => setAccountMenuOpen(!accountMenuOpen)}>
               <div className="relative">
@@ -58,16 +63,12 @@ const Header = () => {
                   <FiUser />
                   View Profile
                 </p>
-                <p className="flex items-center gap-[5px] rounded-md p-[8px] pr-[45px] py-[3px] text-[1rem] text-gray-600 hover:bg-gray-50">
-                  <IoSettingsOutline />
-                  Settings
-                </p>
 
                 <div className="mt-3 border-t border-gray-200 pt-[5px]">
-                  <p className="flex items-center gap-[5px] rounded-md p-[8px] pr-[45px] py-[3px] text-[1rem] text-red-500 hover:bg-red-50">
+                  <button onClick={handleLogOut} className="flex items-center gap-[5px] rounded-md p-[8px] pr-[45px] py-[3px] text-[1rem] text-red-500 hover:bg-red-50">
                     <TbLogout2 />
                     Logout
-                  </p>
+                  </button>
                 </div>
 
               </div>
@@ -79,7 +80,13 @@ const Header = () => {
 
             <CiMenuFries onClick={() => setMobileSidebarOpen(!mobileSidebarOpen)}
               className="text-[1.8rem] text-[#424242]c cursor-pointer md:hidden flex" />
-          </div>
+          </div> :
+            <Link to={'/login'}><button
+              className="py-[7px] px-[16px] capitalize text-black bg-white hover:text-[#3B9DF8] transition-all duration-300 sm:flex hidden">Sign
+              in
+            </button></Link>
+          }
+        
 
           {/* mobile sidebar */}
           {/* <aside
